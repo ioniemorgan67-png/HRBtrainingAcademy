@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hot Water Systems Test</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
+.container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+h1 { text-align: center; }
+.question { margin-bottom: 15px; }
+button { background: #007bff; color: white; padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px; }
+button:hover { background: #0056b3; }
+.note { font-size: 12px; color: #666; margin-top: 15px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Hot Water Systems Knowledge Test</h1>
+
+<form id="testForm">
+<!-- Questions will be dynamically generated -->
+</form>
+
+<button type="button" onclick="submitTest()">Submit Test</button>
+<div class="note">
+Demo / Practice Test – Not an official exam
+</div>
+</div>
+
+<script>
+// List of questions and options
+const questions = [
+{q:"Q1. What is meant by a centralised hot water system?", options:["A. A system serving one outlet only","B. A system providing hot water from one central source","C. A system without storage","D. A system fed only from the mains"], answer:"B"},
+{q:"Q2. Which hot water system is permanently open to atmosphere?", options:["A. Unvented system","B. Instantaneous system","C. Open vented system","D. Thermal store"], answer:"C"},
+{q:"Q3. Which system heats water only when a tap is opened?", options:["A. Storage system","B. Direct system","C. Instantaneous system","D. Indirect system"], answer:"C"},
+{q:"Q4. Which hot water cylinder contains no heat exchanger?", options:["A. Indirect cylinder","B. Single feed cylinder","C. Direct cylinder","D. Combination cylinder"], answer:"C"},
+{q:"Q5. Why are direct cylinders not suitable for central heating?", options:["A. Low pressure operation","B. Plastic construction","C. No heat exchanger","D. Immersion heaters only"], answer:"C"},
+{q:"Q6. Which boiler material is suitable for direct hot water systems?", options:["A. Mild steel","B. Cast iron","C. Copper","D. Galvanised steel"], answer:"C"},
+{q:"Q7. What does stratification describe in a cylinder?", options:["A. Equal temperature","B. Hotter base","C. Hotter top","D. Forced circulation"], answer:"C"},
+{q:"Q8. What pipe size is typical for gravity primary circulation?", options:["A. 15mm","B. 22mm","C. 28mm","D. 35mm"], answer:"B"},
+{q:"Q9. Which system separates water using air bubbles?", options:["A. Direct","B. Double feed indirect","C. Single feed indirect","D. Thermal store"], answer:"C"},
+{q:"Q10. Why are single feed indirect systems no longer permitted?", options:["A. High pressure","B. Require pumps","C. Rely on air separation","D. Use plastic"], answer:"C"},
+{q:"Q11. Which appliance supplies heating and hot water together?", options:["A. Direct cylinder","B. Storage heater","C. Combination boiler","D. Immersion heater"], answer:"C"},
+{q:"Q12. Hot water priority means:", options:["A. Heating runs first","B. Both run","C. Heating stops during hot water use","D. Water stored"], answer:"C"},
+{q:"Q13. Thermal stores heat water using:", options:["A. Stored hot water","B. Immersion heaters","C. Surrounding heat exchangers","D. Vent pipes"], answer:"C"},
+{q:"Q14. What controls outlet temperature from thermal stores?", options:["A. PRV","B. ERV","C. TMV","D. Check valve"], answer:"C"},
+{q:"Q15. Which heater uses a pressure differential diaphragm?", options:["A. Electric shower","B. Thermal store","C. Gas multipoint heater","D. Storage heater"], answer:"A"},
+{q:"Q16. Which document must always be followed?", options:["A. Training notes","B. Manufacturer instructions","C. College notes","D. Customer spec"], answer:"B"},
+{q:"Q17. Which regulation covers scald prevention?", options:["A. Doc L","B. Doc G","C. Doc H","D. Doc P"], answer:"B"},
+{q:"Q18. What protection should be used in properties?", options:["A. Flow increase","B. Dust sheets","C. Higher pressure","D. Extra clips"], answer:"D"},
+{q:"Q19. Which pipe material expands most?", options:["A. Copper","B. Steel","C. Plastic","D. Lead"], answer:"C"},
+{q:"Q20. Pipe expansion is best handled by:", options:["A. Rigid fixing","B. Heavy clips","C. Directional changes","D. Tight clips"], answer:"C"},
+{q:"Q21. Max recommended stored hot water temp?", options:["A. 45°C","B. 50°C","C. 60°C","D. 75°C"], answer:"C"},
+{q:"Q22. Which limits bath outlet temps?", options:["A. ERV","B. PRV","C. TMV","D. Thermostat"], answer:"C"},
+{q:"Q23. Minimum bath HW draw-off pipe size?", options:["A. 15mm","B. 18mm","C. 22mm","D. 28mm"], answer:"C"},
+{q:"Q24. Why no valves on open vents?", options:["A. Improves flow","B. Reduces loss","C. Prevents overpressure","D. Cost"], answer:"C"},
+{q:"Q25. Minimum cylinder to vent distance?", options:["A. 150mm","B. 300mm","C. 450mm","D. 600mm"], answer:"B"},
+{q:"Q26. Why does hard water increase corrosion?", options:["A. Low oxygen","B. High conductivity","C. Low PH","D. High temperature"], answer:"B"},
+{q:"Q27. What protects cylinders from corrosion?", options:["A. Expansion vessel","B. Magnesium anode","C. PRV","D. TMV"], answer:"B"},
+{q:"Q28. What noise suggests scale build-up?", options:["A. Whistle","B. Knock","C. Kettling","D. Vibration"], answer:"C"},
+{q:"Q29. Who services gas multipoint heaters?", options:["A. Any plumber","B. Electrician","C. Gas Safe operative","D. Supervisor"], answer:"C"},
+{q:"Q30. TMV maintenance includes checking:", options:["A. Pipe size","B. Temp accuracy","C. Cylinder insulation","D. Vent size"], answer:"B"},
+{q:"Q31. Before isolation you must:", options:["A. Drain system","B. Remove pipework","C. Inform customer","D. Remove heater"], answer:"C"},
+{q:"Q32. Why fit warning notices?", options:["A. Insurance","B. Prevent operation","C. Aesthetics","D. Pipe ID"], answer:"B"},
+{q:"Q33. Where discharge hot water contents?", options:["A. Surface drain","B. Soakaway","C. Foul drain","D. Ground"], answer:"B"},
+{q:"Q34. Before filling check:", options:["A. Hot taps open","B. Joints insulated","C. Open ends capped","D. Programmer set"], answer:"C"},
+{q:"Q35. Why remove excess flux?", options:["A. Appearance","B. Strength","C. Prevent corrosion","D. Flow"], answer:"C"},
+{q:"Q36. Initial flushing uses:", options:["A. Hot water","B. Chemicals","C. Mains cold water","D. Stored water"], answer:"C"},
+{q:"Q37. Why flush hot water systems?", options:["A. Freeze protection","B. Legionella control","C. Pressure gain","D. Appearance"], answer:"B"},
+{q:"Q38. If leaks found:", options:["A. Continue","B. Lower pressure","C. Rectify","D. Ignore"], answer:"C"},
+{q:"Q39. Legionella-reducing temp range?", options:["A. 40–45°C","B. 45–50°C","C. 55–60°C","D. 65–70°C"], answer:"C"}
+];
+
+// Generate the questions dynamically
+const form = document.getElementById("testForm");
+questions.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.classList.add("question");
+    div.innerHTML = `<p>${item.q}</p>` + item.options.map(opt => 
+        `<input type="radio" name="q${index+1}" value="${opt.charAt(0)}"> ${opt}<br>`).join("");
+    form.appendChild(div);
+});
+
+function submitTest() {
+    const key = prompt("Enter admin key to submit the test:");
+    if (key !== "HRB03") {
+        alert("❌ Invalid admin key.\nSubmission denied.");
+        return;
+    }
+    let score = 0;
+    questions.forEach((item, index) => {
+        const q = form["q"+(index+1)];
+        for (const option of q) {
+            if(option.checked && option.value === item.answer){
+                score++;
+            }
+        }
+    });
+    alert(`✅ Admin key accepted.\nYour score: ${score}/39`);
+}
+</script>
+
+</body>
+</html>
